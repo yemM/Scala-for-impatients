@@ -16,13 +16,13 @@ class TheDefaultLogger extends CryptoLogger {
 }
 
 class TheLogger extends {
-		override val key: Int = 15
+		override val key: Int = -3
 	} with CryptoLogger {
     // magic !
 	}
 
 
 val log3 = new TheDefaultLogger()
-val log15 = new TheLogger()
+val logMinus3 = new TheLogger()
 log3.log("hi!")
-log15.log("hello")
+logMinus3.log("hello")
