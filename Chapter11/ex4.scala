@@ -1,7 +1,3 @@
-/* Implement a class Money with fields for dollars and cents. Supply +, - operators as well as comparison operators == and <. For example, Money(1, 75) + Money(0, 50) == Money(2, 25) should be true. Should you also supply * and / operators? Why or why not? */
-
-import Math._
-
 object Money
 {
   def unapply(money: Money) = {
