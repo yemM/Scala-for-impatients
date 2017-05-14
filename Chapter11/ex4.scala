@@ -29,6 +29,32 @@ class Money(d: Int, c: Int)
     val Money(otherDollars, otherCents) = other
     new Money(dollars - otherDollars, cents - otherCents)
   }
+
+  def ==(other: Money): Boolean = {
+    val Money(otherDollars, otherCents) = other
+
+    (dollars == otherDollars && cents == otherCents)
+  }
+
+  def <(other: Money): Boolean = {
+    val Money(otherDollars, otherCents) = other
+
+    ((dollars * 100 + cents) < (otherDollars * 100 + cents))
+  }
+
+  def >(other: Money): Boolean = {
+    val Money(otherDollars, otherCents) = other
+
+    ((dollars * 100 + cents) > (otherDollars * 100 + otherCents))
+  }
+
+  def >=(other: Money): Boolean = {
+    (this > other || this == other)
+  }
+
+  def <=(other: Money): Boolean = {
+    (this < other || this == other)
+  }
 }
 
 val m1 = new Money(10,50)
@@ -37,3 +63,6 @@ println(new Money(10,350))
 
 println(m1 + new Money(130,32))
 println(m1 - new Money(9,50))
+println(m1 == new Money(5,99), m1 == new Money(10,50))
+println(m1 > new Money(5,99), m1 < new Money(10,50))
+println(m1 <= new Money(5,99), m1 >= new Money(10,50))
