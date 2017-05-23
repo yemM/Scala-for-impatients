@@ -9,9 +9,9 @@ object ASCIIArt
   }
 }
 
-class ASCIIArt(fig: String = "")
+class ASCIIArt(fig: String = "", private val spacing: Int = 5)
 {
-  private val figure: Array[String] = fig.split(System.lineSeparator)
+  private val figure: Array[String] = fig.split("\n")
 
   def /(other: ASCIIArt): ASCIIArt = {
     new ASCIIArt(this + "\n" + other);
@@ -20,18 +20,12 @@ class ASCIIArt(fig: String = "")
   def |(other: ASCIIArt): ASCIIArt = {
     var ASCIIArt(otherFigure) = other
 
-    val figureCouples = if(getHeight > other.getHeight) {
-        figure zip (otherFigure ++ new Array[String](getHeight - other.getHeight))
-      } else {
-        figure ++ new Array[String](other.getHeight - getHeight) zip otherFigure
-      }
+    val figureCouples = figure zipAll(otherFigure, "", "")
 
     val newFigure: String = figureCouples.foldLeft(""){ 
       (figureString, couple) => {
-        val left = if (null == couple._1) "" else couple._1
-        val right = if(null == couple._2) "" else couple._2
-
-        figureString + left + " " * (getWidth() - left.size) + " " + right + "\n"
+        val padding = "%" + (getWidth() - couple._1.length + couple._2.length + spacing) + "s"
+        figureString + couple._1 + padding.format(couple._2 + "\n")
       }
     }
 
@@ -41,8 +35,8 @@ class ASCIIArt(fig: String = "")
   private def getWidth(): Int = {
     val maxSize: Int = figure.foldLeft(0){
       (previousSize: Int, line: String) => {
-        if(previousSize < line.size){
-          line.size
+        if(previousSize < line.length){
+          line.length
         } else {
           previousSize
         }
@@ -52,7 +46,7 @@ class ASCIIArt(fig: String = "")
   }
 
   private def getHeight(): Int = {
-    figure.size
+    figure.length
   }
 
   override def toString(): String = {
@@ -60,11 +54,11 @@ class ASCIIArt(fig: String = "")
   }
 }
 
-val scala = ASCIIArt("  _________             .__          \n /   _____/ ____ _____  |  | _____   \n \\_____  \\_/ ___\\\\__  \\ |  | \\__  \\  \n /        \\  \\___ / __ \\|  |__/ __ \\_\n/_______  /\\___  >____  /____(____  /\n        \\/     \\/     \\/          \\/ ")
+val scala = ASCIIArt("  _________             .__\n /   _____/ ____ _____  |  | _____\n \\_____  \\_/ ___\\\\__  \\ |  | \\__  \\\n /        \\  \\___ / __ \\|  |__/ __ \\_\n/_______  /\\___  >____  /____(____  /\n        \\/     \\/     \\/          \\/ ")
 
-val is = ASCIIArt(".__        \n|__| ______\n|  |/  ___/\n|  |\\___ \\ \n|__/____  >\n        \\/ ")
+val is = ASCIIArt(".__\n|__| ______\n|  |/  ___/\n|  |\\___ \\ \n|__/____  >\n        \\/ ")
   
-val fun = ASCIIArt("  _____             \n_/ ____\\_ __  ____  \n\\   __\\  |  \\/    \\ \n |  | |  |  /   |  \\\n |__| |____/|___|  /\n                 \\/ ")
+val fun = ASCIIArt("  _____\n_/ ____\\_ __  ____\n\\   __\\  |  \\/    \\\n |  | |  |  /   |  \\\n |__| |____/|___|  /\n                 \\/ ")
 
 println(scala | is | fun)
 println((scala | is) / fun)
